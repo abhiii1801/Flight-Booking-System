@@ -1,0 +1,260 @@
+{% extends "base.html" %} {% block title %}Flight Search Results{% endblock %}
+{% block content %}
+
+<!-- Search Box (Same as Homepage) -->
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="search-card">
+        <h4 class="mb-4">Search Flights</h4>
+        <form action="/search_flights" method="post">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="origin" class="form-label">Origin</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-plane-departure"></i></span>
+                <select class="form-select" id="origin" name="origin">
+                  <option value="" disabled {% if not params.origin %}selected{% endif %}>Select Origin</option>
+                  {% for city in cities %}
+                  <option value="{{ city[1] }}" {% if city[1] == params.origin %}selected{% endif %}>{{ city[0] }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+        
+            <div class="col-md-6">
+              <label for="destination" class="form-label">Destination</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-plane-arrival"></i></span>
+                <select class="form-select" id="destination" name="destination">
+                  <option value="" disabled {% if not params.destination %}selected{% endif %}>Select Destination</option>
+                  {% for city in cities %}
+                  <option value="{{ city[1] }}" {% if city[1] == params.destination %}selected{% endif %}>{{ city[0] }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+        
+            <div class="col-md-4">
+              <label for="departure_date" class="form-label">Departure Date</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                <input type="date" class="form-control" id="departure_date" name="departure_date"
+                  min="{{min_date}}" max="{{max_date}}" value="{{ params.start_date }}">
+              </div>
+            </div>
+        
+            <div class="col-md-4">
+              <label for="end_date" class="form-label">End Date</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                <input type="date" class="form-control" id="end_date" name="end_date"
+                  min="{{min_date}}" max="{{max_date}}" value="{{ params.end_date }}">
+              </div>
+            </div>
+        
+            <div class="col-md-4">
+              <label for="cabin" class="form-label">Cabin Class</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-couch"></i></span>
+                <select class="form-select" id="cabin" name="cabin_class">
+                  <option value="" selected disabled>Select Cabin Class</option>
+                  {% for cabin_class in cabin_classes %}
+                  <option value="{{ cabin_class[0] }}" {% if cabin_class[0] == params.cabin_class %}selected{% endif %}>
+                    {{ cabin_class[0] }}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+        
+            <div class="col-12 mt-4 text-center">
+              <button type="submit" class="btn btn-search">
+                <i class="fas fa-search me-2"></i>Search Flights
+              </button>
+            </div>
+          </div>
+        </form>        
+      </div>   
+    </div>
+  </div>
+</div>
+
+<!-- Search Results -->
+<div class="container">
+  <div class="row">
+    <!-- Filters Column -->
+    <div class="col-lg-3">
+      <form action="/filter_flights" method="POST">
+        <div class="filter-card shadow">
+          <div class="filter-title">Filter Results</div>
+      
+          <!-- Price -->
+            <div class="mb-3">
+              <label class="form-label">Price Range: ₹<span id="priceValue">{{ selected_price or max_price }}</span></label>
+              <input type="range" name="price" class="form-range" min="100" max="{{ max_price }}" step="50"
+                    value="{{ selected_price or max_price }}" id="priceRange">
+              <script>
+                const range = document.getElementById('priceRange');
+                const value = document.getElementById('priceValue');
+                value.textContent = range.value;
+                range.addEventListener('input', () => value.textContent = range.value);
+              </script>
+              <div class="d-flex justify-content-between">
+                <span>₹100</span>
+                <span>₹{{ max_price }}</span>
+              </div>
+            </div>
+
+            <!-- Airlines -->
+            <hr />
+            <div class="mb-3">
+              <label class="form-label">Airlines</label>
+              {% for airline in airlines %}
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="airlines" value="{{ airline[0] }}"
+                      id="airline_{{ loop.index }}"
+                      {% if airline[0] in selected_airlines %}checked{% endif %}>
+                <label class="form-check-label" for="airline_{{ loop.index }}">{{ airline[0] }}</label>
+              </div>
+              {% endfor %}
+            </div>
+
+            <!-- Reviews -->
+            <hr />
+            <div class="mb-3">
+              <label class="form-label">Minimum Review Rating</label>
+              <select name="min_review" class="form-select">
+                <option value="" {% if not selected_review %}selected{% endif %}>Any</option>
+                <option value="1" {% if selected_review == '1' %}selected{% endif %}>⭐</option>
+                <option value="2" {% if selected_review == '2' %}selected{% endif %}>⭐⭐</option>
+                <option value="3" {% if selected_review == '3' %}selected{% endif %}>⭐⭐⭐</option>
+                <option value="4" {% if selected_review == '4' %}selected{% endif %}>⭐⭐⭐⭐</option>
+              </select>
+            </div>
+
+          <div class="text-center mt-3">
+            <button class="btn btn-primary" type="submit">Apply Filters</button>
+          </div>
+        </div>
+      </form>      
+    </div>
+
+    <!-- Results Column -->
+    <div class="col-lg">
+      <div class="results-title">
+        {{flights[0].origin_city}} ({{flights[0].origin}}) to {{flights[0].destination_city}} ({{flights[0].destination}}) - {{flights[0].date_formatted}}
+        <span class="badge bg-primary ms-2">{{flights | length}} flights found</span>
+      </div>
+
+      <!-- Flight Result 1 -->
+      {% for flight in flights %}
+      <!-- Flight Result Card - Redesigned -->
+      <div
+        class="card flight-card shadow mb-4 border-0 rounded-3 overflow-hidden"
+      >
+        <!-- Card Header with Airline Info and Date -->
+        <div
+          class="flight-header p-3 d-flex justify-content-between align-items-center bg-light"
+        >
+          <div class="d-flex align-items-center">
+            <div>
+              <div class="text-primary fw-bold fs-5">{{flight.company}}</div>
+              <div class="text-muted small">Flight {{flight.flight_no}}</div>
+            </div>
+          </div>
+          <div class="text-end date-badge">
+            <div class="bg-white rounded-pill shadow-sm px-3 py-2">
+              <i class="far fa-calendar-alt text-primary me-2"></i>
+              <span class="fw-medium">{{flight.date_formatted}}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Body with Flight Details -->
+        <div class="card-body p-4">
+          <div class="row align-items-center">
+            <!-- Departure Info -->
+            <div class="col-md-3 text-center text-md-start">
+              <div class="flight-time fw-bold fs-4">
+                {{flight.departure_time_formatted}}
+              </div>
+              <div class="text-muted">
+                <i class="fas fa-map-marker-alt me-1 text-primary"></i>
+                {{flight.origin}}, {{flight.origin_city}}
+              </div>
+            </div>
+
+            <!-- Flight Path -->
+            <div class="col-md-6 flight-path my-3 my-md-0">
+              <div class="position-relative">
+                <div
+                  class="flight-duration text-center mb-2 text-primary fw-medium"
+                >
+                  {{flight.duration_time_formatted}}
+                </div>
+                <div class="flight-line"></div>
+                <div class="flight-icon">
+                  <i class="fas fa-plane text-primary"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Arrival Info -->
+            <div class="col-md-3 text-center text-md-end">
+              <div class="flight-time fw-bold fs-4">
+                {{flight.arrival_time_formatted}}
+              </div>
+              <div class="text-muted">
+                <i class="fas fa-map-marker-alt me-1 text-primary"></i>
+                {{flight.destination}}, {{flight.destination_city}}
+              </div>
+            </div>
+          </div>
+
+          <!-- Flight Price and Selection -->
+          <div class="row mt-4 align-items-center bg-light mx-0 p-3 rounded-3">
+            <div class="col-md-3">
+              <div>
+                <i class="fas fa-plane me-2 text-primary"></i
+                ><span class="text-muted">Aircraft:</span>
+                {{flight.aircraft_type}}
+              </div>
+            </div>
+
+            <div class="col-md-5">
+              <div class="rating">
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star text-warning"></i>
+                <i class="fas fa-star-half-alt text-warning"></i>
+                <span class="ms-2 text-muted"
+                  >{{flight.average_rating}} ({{flight.total_reviews}}
+                  reviews)</span
+                >
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="d-flex align-items-center justify-content-md-end">
+                <div class="text-end me-4">
+                  <div class="fs-4 fw-bold text-primary">
+                    ₹{{flight.flight_price}}
+                  </div>
+                  <div class="text-muted small">{{flight.cabin_class}}</div>
+                </div>
+                <button class="btn btn-primary rounded-pill px-4 fw-medium">
+                  Select <i class="fas fa-arrow-right ms-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</div>
+{% endblock %}

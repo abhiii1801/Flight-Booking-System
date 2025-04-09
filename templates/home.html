@@ -1,0 +1,206 @@
+{% extends "base.html" %} {% block title %}Book Your Flights{% endblock %} {%
+block content %}
+<!-- Hero Section -->
+<section class="hero text-center">
+  <div class="container">
+    <h1 class="display-4 fw-bold">Discover the World with SkyJourney</h1>
+    <p class="lead">
+      Find and book the best flight deals for your next adventure
+    </p>
+  </div>
+</section>
+
+<!-- Search Box -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="search-card" id="search-card-home">
+        <h4 class="mb-4">Search Flights</h4>
+        <form action="/search_flights" method="post">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="origin" class="form-label">Origin</label>
+              <div class="input-group">
+                <span class="input-group-text"
+                  ><i class="fas fa-plane-departure"></i
+                ></span>
+                <select class="form-select" id="origin" name="origin">
+                  <option value="" disabled selected>Select Origin</option>
+                  {% for city in cities %}
+                  <option value="{{city[1]}}">{{ city[0] }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="destination" class="form-label">Destination</label>
+              <div class="input-group">
+                <span class="input-group-text"
+                  ><i class="fas fa-plane-arrival"></i
+                ></span>
+                <select class="form-select" id="destination" name="destination">
+                  <option value="" disabled selected>Select Destination</option>
+                  {% for city in cities %}
+                  <option value="{{city[1]}}">{{ city[0] }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label for="departure_date" class="form-label"
+                >Departure Date</label
+              >
+              <div class="input-group">
+                <span class="input-group-text"
+                  ><i class="fas fa-calendar"></i
+                ></span>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="departure_date"
+                  min="{{min_date}}"
+                  max="{{max_date}}"
+                  name="departure_date"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label for="end_date" class="form-label">End Date</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="end_date"
+                  name="end_date"
+                  min="{{min_date}}"
+                  max="{{max_date}}"
+                />
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <label for="cabin" class="form-label">Cabin Class</label>
+              <div class="input-group">
+                <span class="input-group-text"
+                  ><i class="fas fa-couch"></i
+                ></span>
+                <select class="form-select" id="cabin" name="cabin_class">
+                  <option value="" selected disabled>Select Cabin Class</option>
+                  {% for cabin_class in cabin_classes %}
+                  <option value="{{cabin_class[0]}}">{{cabin_class[0]}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+
+            <div class="col-12 mt-4 text-center">
+              <button type="submit" class="btn btn-search btn-lg px-5">
+                <i class="fas fa-search me-2"></i>Search Flights
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Features -->
+<section class="py-5 mt-5 bg-light">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <div class="feature-icon">
+          <i class="fas fa-tags"></i>
+        </div>
+        <h3>Best Prices</h3>
+        <p>Guaranteed best deals and discounts on all flights.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>Secure Booking</h3>
+        <p>Safe and secure payment system for peace of mind.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="feature-icon">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3>24/7 Support</h3>
+        <p>Round the clock customer service for all your needs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Popular Destinations -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="text-center mb-4">Popular Destinations</h2>
+    <div class="row">
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <img
+            src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80"
+            class="card-img-top"
+            alt="New York"
+          />
+          <div class="card-body">
+            <h5 class="card-title">New York</h5>
+            <p class="card-text">From $299</p>
+            <a href="#" class="btn btn-outline-primary">Explore</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <img
+            src="https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80"
+            class="card-img-top"
+            alt="London"
+          />
+          <div class="card-body">
+            <h5 class="card-title">London</h5>
+            <p class="card-text">From $449</p>
+            <a href="#" class="btn btn-outline-primary">Explore</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <img
+            src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80"
+            class="card-img-top"
+            alt="Tokyo"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Tokyo</h5>
+            <p class="card-text">From $799</p>
+            <a href="#" class="btn btn-outline-primary">Explore</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card h-100">
+          <img
+            src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&h=200&q=80"
+            class="card-img-top"
+            alt="Paris"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Paris</h5>
+            <p class="card-text">From $399</p>
+            <a href="#" class="btn btn-outline-primary">Explore</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

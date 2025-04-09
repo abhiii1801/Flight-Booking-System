@@ -1,0 +1,5 @@
+print(f"Departure Time: {format_time(dep_hour, dep_min)}")
+        print(f"Arrival Time: {format_time(arr_hour, arr_min)}")
+
+
+Flight Search Results

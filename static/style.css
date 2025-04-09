@@ -1,0 +1,160 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+  }
+  .hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-1.2.1&auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 7rem 0;
+    margin-bottom: 2rem;
+  }
+  .search-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  #search-card-home {
+    margin-top: -5rem;
+  }
+
+  .navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  .btn-search {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+  }
+  .feature-icon {
+    font-size: 2rem;
+    color: #0d6efd;
+    margin-bottom: 1rem;
+  }
+  footer {
+    background-color: #212529;
+    color: white;
+    padding: 2rem 0;
+  }
+
+  .navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+  }
+  .search-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  .btn-search {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+  }
+  .results-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .flight-card {
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .flight-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  .flight-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  .airline-logo {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+  }
+  .flight-time {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  .flight-duration {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+  .flight-path {
+    position: relative;
+    padding: 0 30px;
+    text-align: center;
+  }
+  .flight-path::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #dee2e6;
+    z-index: 1;
+  }
+  .flight-path i {
+    position: relative; /* Change to relative for better alignment */
+    top: 0; /* Reset top positioning */
+    background-color: white;
+    padding: 0 10px;
+    color: #0d6efd;
+    z-index: 2; /* Ensure it stays above the line */
+  }
+  
+  .flight-duration {
+    margin-bottom: 10px; /* Add spacing between text and icon */
+    z-index: 3; /* Ensure it stays above the line */
+  }
+
+  .rating {
+    color: #ffc107;
+  }
+  .select-flight {
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    border-radius: 5px;
+  }
+  .filter-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .filter-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  footer {
+    background-color: #212529;
+    color: white;
+    padding: 2rem 0;
+    margin-top: 3rem;
+  }
+
+
