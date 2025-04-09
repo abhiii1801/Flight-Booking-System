@@ -83,8 +83,6 @@ def filter_flights():
         airlines=selected_airlines,
         min_review=min_review
     )
-
-    print(filtered_flights)
     
     return render_template('flights.html', 
         flights=filtered_flights,
