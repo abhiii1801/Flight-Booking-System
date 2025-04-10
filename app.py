@@ -97,6 +97,11 @@ def filter_flights():
         selected_price=price,
         selected_review=min_review
     )
+    
+    
+@app.route('/billing')
+def billing():
+    return render_template('billing.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
