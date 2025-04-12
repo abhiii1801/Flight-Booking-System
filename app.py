@@ -99,8 +99,9 @@ def filter_flights():
     )
     
     
-@app.route('/billing')
+@app.route('/billing', methods = ["POST"])
 def billing():
+    
     return render_template('billing.html')
 
 if __name__ == '__main__':
