@@ -133,7 +133,23 @@ class Get_data(Data):
         return self.add_info_flights(rows)
     
 class Post_data(Data):
-    pass
+    def add_passenger(self, first, last, age, email, passport):
+        self.cur.execute("""
+            INSERT INTO Passenger (first_name, last_name, age, email, passport_no)
+            VALUES (%s, %s, %s, %s, %s)
+            RETURNING passenger_id
+        """, (first, last, age, email, passport))
+        pid = self.cur.fetchone()[0]
+        self.conn.commit()
+        return pid
+
+    def add_booking(self, flight_id, passenger_id, price):
+        self.cur.execute("""
+            INSERT INTO Booking (flight_id, passenger_id, price)
+            VALUES (%s, %s, %s)
+        """, (flight_id, passenger_id, price))
+        self.conn.commit()
+        
 
         
 

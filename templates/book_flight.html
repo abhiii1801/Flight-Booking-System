@@ -1,0 +1,191 @@
+{% extends "base.html" %} {% block title %}Billing{% endblock %}
+{% block content %}
+
+<div class="container billing-container">
+  <!-- Steps Indicator -->
+  <div class="step-indicator">
+    <div class="step active">
+      <div class="step-number">1</div>
+      <div class="step-text">Select Flight</div>
+    </div>
+    <div class="step active">
+      <div class="step-number">2</div>
+      <div class="step-text">Payment</div>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-text">Confirmation</div>
+    </div>
+  </div>
+
+  <div class="row">
+      <!-- Billing Header -->
+      <div class="billing-header">
+        <h4 class="mb-0">
+          <i class="fas fa-credit-card me-2"></i> Payment Details
+        </h4>
+      </div>
+
+      <!-- Flight Summary -->
+      <div class="billing-section">
+        <h5 class="mb-4">Flight Summary</h5>
+
+        <!-- Flight Card -->
+        <div
+          class="card flight-card shadow-sm mb-4 border-0 rounded-3 overflow-hidden"
+        >
+          <!-- Card Header with Airline Info and Date -->
+          <div
+            class="flight-header p-3 d-flex justify-content-between align-items-center bg-light"
+          >
+            <div class="d-flex align-items-center">
+              <div>
+                <div class="text-primary fw-bold fs-5">{{flight.company}}</div>
+                <div class="text-muted small">Flight {{flight.flight_no}}</div>
+              </div>
+            </div>
+            <div class="text-end date-badge">
+              <div class="bg-white rounded-pill shadow-sm px-3 py-2">
+                <i class="far fa-calendar-alt text-primary me-2"></i>
+                <span class="fw-medium">{{flight.date}}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Body with Flight Details -->
+          <div class="card-body p-4">
+            <div class="row align-items-center">
+              <!-- Departure Info -->
+              <div class="col-md-3 text-center text-md-start">
+                <div class="flight-time fw-bold fs-4">{{flight.departure_time}}</div>
+                <div class="text-muted">
+                  <i class="fas fa-map-marker-alt me-1 text-primary"></i>
+                  {{flight.origin}}, {{flight.origin_city}}
+                </div>
+              </div>
+
+              <!-- Flight Path -->
+              <div class="col-md-6 flight-path my-3 my-md-0">
+                <div class="position-relative">
+                  <div
+                    class="flight-duration text-center mb-2 text-primary fw-medium"
+                  >
+                    {{flight.duration}}
+                  </div>
+                  <div class="flight-line"></div>
+                  <div class="flight-icon">
+                    <i class="fas fa-plane text-primary"></i>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Arrival Info -->
+              <div class="col-md-3 text-center text-md-end">
+                <div class="flight-time fw-bold fs-4">11:00 AM</div>
+                <div class="text-muted">
+                  <i class="fas fa-map-marker-alt me-1 text-primary"></i>
+                {{flight.departure}}, {{flight.departure_city}}
+                </div>
+              </div>
+            </div>
+
+            <!-- Flight Details -->
+            <div
+              class="row mt-4 align-items-center bg-light mx-0 p-3 rounded-3"
+            >
+              <div class="col">
+                <div>
+                  <i class="fas fa-plane me-2 text-primary"></i>
+                  <span class="text-muted">Aircraft:</span>
+                  {{flight.aircraft_type}}
+                </div>
+              </div>
+
+              <div class="col ">
+                <div>
+                  <i class="fas fa-couch me-2 text-primary"></i>
+                  <span class="text-muted">Cabin:</span>
+                  {{flight.cabin_class}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Passenger Information -->
+        <h3>Book Flight</h3>
+        <div class="mb-4">
+          <label for="numPassengers" class="form-label mt-3">Number of Passengers</label>
+          <input type="number" min="1" max="10" id="numPassengers" class="form-control" placeholder="Enter number of passengers" />
+        </div>
+
+        <!-- Dynamic Passenger Form -->
+        <form method="POST" action="/submit_passengers" id="passengerForm">
+          <div id="passengerInputs"></div>
+          <button type="submit" class="btn btn-primary mt-4 mb-4">Proceed</button>
+        </form>
+      </div>
+
+      <script>
+        const numInput = document.getElementById("numPassengers");
+        const passengerForm = document.getElementById("passengerForm");
+        const submitBtn = passengerForm.querySelector("button[type='submit']");
+      
+        submitBtn.disabled = true;
+      
+        numInput.addEventListener("input", function () {
+          const count = parseInt(this.value);
+          const container = document.getElementById("passengerInputs");
+          container.innerHTML = "";
+      
+          if (!count || count < 1) {
+            submitBtn.disabled = true;
+            return;
+          }
+      
+          submitBtn.disabled = false;
+      
+          for (let i = 1; i <= count; i++) {
+            container.innerHTML += `
+              <div class="mb-4 border p-3 rounded bg-light">
+                <h5>Passenger ${i}</h5>
+                <input name="firstName_${i}" class="form-control mb-2" placeholder="First Name" required />
+                <input name="lastName_${i}" class="form-control mb-2" placeholder="Last Name" required />
+                <input name="age_${i}" type="number" class="form-control mb-2" placeholder="Age" required />
+                <input name="email_${i}" type="email" class="form-control mb-2" placeholder="Email" required />
+                <input name="passport_${i}" class="form-control mb-2" placeholder="Passport No" required />
+              </div>
+            `;
+          }
+      
+          container.innerHTML += `<input type="hidden" name="numPassengers" value="${count}" />`;
+        });
+      </script>
+
+      <!-- Help Box -->
+      <div class="billing-section">
+        <h5 class="mb-3">Need Help?</h5>
+        <p class="text-muted">
+          If you need assistance with your booking, our customer support team is
+          available 24/7.
+        </p>
+        <div class="d-flex align-items-center mt-3">
+          <i class="fas fa-phone-alt me-3 text-primary fs-4"></i>
+          <div>
+            <div class="fw-medium">Call Support</div>
+            <div class="text-muted">+91 1800 123 4567</div>
+          </div>
+        </div>
+        <div class="d-flex align-items-center mt-3">
+          <i class="fas fa-envelope me-3 text-primary fs-4"></i>
+          <div>
+            <div class="fw-medium">Email Support</div>
+            <div class="text-muted">support@skyjourney.com</div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

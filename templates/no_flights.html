@@ -1,0 +1,86 @@
+{% extends "base.html" %} {% block title %}Flight Search Results{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="search-card">
+          <h4 class="mb-4">Search Flights</h4>
+          <form action="/search_flights" method="post">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="origin" class="form-label">Origin</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-plane-departure"></i></span>
+                  <select class="form-select" id="origin" name="origin">
+                    <option value="" disabled {% if not params.origin %}selected{% endif %}>Select Origin</option>
+                    {% for city in cities %}
+                    <option value="{{ city[1] }}" {% if city[1] == params.origin %}selected{% endif %}>{{ city[0] }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+          
+              <div class="col-md-6">
+                <label for="destination" class="form-label">Destination</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-plane-arrival"></i></span>
+                  <select class="form-select" id="destination" name="destination">
+                    <option value="" disabled {% if not params.destination %}selected{% endif %}>Select Destination</option>
+                    {% for city in cities %}
+                    <option value="{{ city[1] }}" {% if city[1] == params.destination %}selected{% endif %}>{{ city[0] }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+          
+              <div class="col-md-4">
+                <label for="departure_date" class="form-label">Departure Date</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                  <input type="date" class="form-control" id="departure_date" name="departure_date"
+                    min="{{min_date}}" max="{{max_date}}" value="{{ params.start_date }}">
+                </div>
+              </div>
+          
+              <div class="col-md-4">
+                <label for="end_date" class="form-label">End Date</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                  <input type="date" class="form-control" id="end_date" name="end_date"
+                    min="{{min_date}}" max="{{max_date}}" value="{{ params.end_date }}">
+                </div>
+              </div>
+          
+              <div class="col-md-4">
+                <label for="cabin" class="form-label">Cabin Class</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-couch"></i></span>
+                  <select class="form-select" id="cabin" name="cabin_class">
+                    <option value="" selected disabled>Select Cabin Class</option>
+                    {% for cabin_class in cabin_classes %}
+                    <option value="{{ cabin_class[0] }}" {% if cabin_class[0] == params.cabin_class %}selected{% endif %}>
+                      {{ cabin_class[0] }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+          
+              <div class="col-12 mt-4 text-center">
+                <button type="submit" class="btn btn-search">
+                  <i class="fas fa-search me-2"></i>Search Flights
+                </button>
+              </div>
+            </div>
+          </form>        
+        </div>   
+      </div>
+    </div>
+  </div>
+
+<div class="container mt-4">
+  <h1 class="mb-5 text-center">No Flights Found</h1>
+</div>
+
+{% endblock %}
